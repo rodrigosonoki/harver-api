@@ -5,24 +5,23 @@ const userSchema = new mongoose.Schema(
     sellerId: {
       type: String,
       required: true,
-      min: 6,
-      max: 255,
     },
-    order: {
-      productId: {
-        type: String,
-        required: true,
+    products: [
+      {
+        productId: {
+          type: String,
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
       },
-      quantity: {
-        type: Number,
-        required: true,
-      },
-      price: {
-        type: Number,
-        required: true,
-      },
-    },
-
+    ],
     date: {
       type: Date,
       default: Date.now,

@@ -4,14 +4,18 @@ const Order = require("../model/Order");
 router.post("/", async (req, res) => {
   // validate the user
 
-  const order = new Order({
+  /*   const order = new Order({
     sellerId: req.body.sellerId,
-    order: {
-      productId: req.body.order.productId,
-      quantity: req.body.order.quantity,
-      price: req.body.order.price,
-    },
-  });
+    products: [
+      {
+        productId: req.body.products.productId,
+        quantity: req.body.products.quantity,
+        price: req.body.products.price,
+      },
+    ],
+  }); */
+
+  const order = new Order(req.body);
 
   try {
     const savedOrder = await order.save();
