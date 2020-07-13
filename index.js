@@ -1,6 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const app = express();
+
+app.use(cors());
+app.options("*", cors());
 
 // import routes
 const authRoutes = require("./routes/auth");
@@ -29,4 +33,4 @@ app.use("/api/createorder", createOrder);
 
 app.use("/api/getorder", verifyToken, getOrder);
 
-app.listen(3000, () => console.log("Listening on PORT 3000"));
+app.listen(3333, () => console.log("Listening on PORT 3000"));
