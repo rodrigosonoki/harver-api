@@ -6,6 +6,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    pedidoId: {
+      type: String,
+      required: true,
+    },
     products: [
       {
         productId: {
@@ -24,7 +28,11 @@ const userSchema = new mongoose.Schema(
     ],
     date: {
       type: Date,
-      default: Date.now,
+      default: new Date(),
+    },
+    status: {
+      type: String,
+      default: "Pendente",
     },
   },
   { collection: "orders" }

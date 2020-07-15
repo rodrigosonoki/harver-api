@@ -3,6 +3,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 
+//MIDDLEWARES
+const pedidoId = require("./middlewares/orderId");
+
 app.use(cors());
 app.options("*", cors());
 
@@ -29,7 +32,7 @@ app.use(express.json());
 // route middlewares
 app.use("/api/user", authRoutes);
 
-app.use("/api/createorder", createOrder);
+app.use("/api/createorder", pedidoId, createOrder);
 
 app.use("/api/getorder", verifyToken, getOrder);
 
