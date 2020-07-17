@@ -4,6 +4,10 @@ const Order = require("../model/Order");
 const pedidoId = async (req, res, next) => {
   //const id = (await Order.find().Count()) + 1;
   const id = (await Order.find().countDocuments()) + 1;
+  const sum = req.body.products.reduce(function (s, a) {
+    return s + a.price;
+  }, 0);
+  req.body.totalPrice = sum;
   req.body.pedidoId = id;
   next();
 };

@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    totalPrice: {
+      type: Number,
+      required: true,
+    },
     date: {
       type: Date,
       default: new Date(),

@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const User = require("../model/User");
-const { registerValidation, loginValidation } = require("../validation");
+const {
+  registerValidation,
+  loginValidation,
+} = require("../controllers/validation");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -14,14 +17,13 @@ router.post("/register", async (req, res) => {
 
   const isEmailExist = await User.findOne({ email: req.body.email });
   if (isEmailExist)
-    return res.status(400).json({ error: "Email already exists" });
+    return res.status(400).json({ error: "O e-mail já está cadastrado." });
 
   // hash the password
   const salt = await bcrypt.genSalt(10);
   const password = await bcrypt.hash(req.body.password, salt);
 
   const user = new User({
-    name: req.body.name,
     email: req.body.email,
     password,
   });

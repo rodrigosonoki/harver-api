@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
 
+require("dotenv/config");
+
 //MIDDLEWARES
 const pedidoId = require("./middlewares/orderId");
 
@@ -18,7 +20,7 @@ const getOrder = require("./routes/getOrders");
 
 // connect to db
 mongoose.connect(
-  "mongodb+srv://rodrigo:rodrigo123@harver-users.yjsqx.gcp.mongodb.net/users?retryWrites=true&w=majority",
+  process.env.DB_CONNECT,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
