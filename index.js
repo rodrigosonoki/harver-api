@@ -17,6 +17,7 @@ const verifyToken = require("./routes/validate-token");
 
 const createOrder = require("./routes/createOrder");
 const getOrder = require("./routes/getOrders");
+const getOrderDetail = require("./routes/getOrderDetail");
 
 // connect to db
 mongoose.connect(
@@ -37,5 +38,7 @@ app.use("/api/user", authRoutes);
 app.use("/api/createorder", pedidoId, createOrder);
 
 app.use("/api/getorder", verifyToken, getOrder);
+
+app.use("/api/getorderdetail", verifyToken, getOrderDetail);
 
 app.listen(3333, () => console.log("Listening on PORT 3000"));
