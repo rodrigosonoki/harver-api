@@ -7,6 +7,8 @@ const {
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+require("dotenv/config");
+
 router.post("/register", async (req, res) => {
   // validate the user
   const { error } = registerValidation(req.body);
@@ -60,12 +62,13 @@ router.post("/login", async (req, res) => {
       email: user.email,
       id: user._id,
     },
-    "123"
+    process.env.SECRET_TOKEN
   );
 
   res.header("auth-token", token).json({
     error: null,
     data: {
+      id: user.id,
       token,
     },
   });
