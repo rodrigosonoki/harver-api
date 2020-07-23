@@ -3,6 +3,9 @@ const Account = require("../model/Account");
 
 router.get("/getinfo", async (req, res) => {
   const account = await Account.findOne({ userId: req.user.id }).exec();
+  if (req.user.id != account.userId) {
+    return res.status(401).json("Acesso negado.");
+  }
   try {
     res.json({
       account: {
@@ -17,10 +20,11 @@ router.get("/getinfo", async (req, res) => {
 });
 
 router.post("/createInfo", async (req, res) => {
+  req.body.userId = req.user.id;
   const account = new Account(req.body);
   try {
-    const savedAccount = await account.save();
-    res.json({ error: null, data: savedAccount });
+    await account.save();
+    res.json("Conta criada com sucesso.");
   } catch (error) {
     res.status(400).json({ error });
   }

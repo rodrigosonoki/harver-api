@@ -18,7 +18,7 @@ const storeRoutes = require("./routes/store");
 const orderRoutes = require("./routes/order");
 const productRoutes = require("./routes/product");
 
-const getUser = require("./routes/getUser");
+const userRoutes = require("./routes/user");
 
 // connect to db
 mongoose.connect(
@@ -42,7 +42,7 @@ app.use("/api/store", verifyToken, storeRoutes);
 
 app.use("/api/order", verifyToken, orderRoutes);
 
-app.use("/api/getuser", verifyToken, getUser);
+app.use("/api/user", verifyToken, userRoutes);
 
 app.use("/api/product", verifyToken, productRoutes);
 

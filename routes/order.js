@@ -9,7 +9,7 @@ const Sku = require("../model/Sku");
 router.get("/getorder", async (req, res) => {
   const store = await Store.findOne(
     { userId: req.user.id },
-    { __v: 0, name: 0, userId: 0, products: 0 }
+    { __v: 0, name: 0, products: 0 }
   );
 
   const orders = await Order.find(
@@ -20,6 +20,10 @@ router.get("/getorder", async (req, res) => {
       __v: 0,
     }
   );
+
+  if (!store.userId.includes(req.user.id)) {
+    return res.status(401).json({ error: "Acesso negado." });
+  }
 
   try {
     res.json({
@@ -34,6 +38,10 @@ router.get("/getorder", async (req, res) => {
 router.get("/:id", async (req, res) => {
   id = req.params.id;
   const orders = await Order.findOne({ pedidoId: id }).exec();
+  const store = await Store.findById(orders.storeId).exec();
+  if (!store.userId.includes(req.user.id)) {
+    return res.status(401).json("Acesso negado");
+  }
   const skuCodes = orders.skus.map((i) => {
     return i.skuCode;
   });
@@ -52,11 +60,8 @@ router.get("/:id", async (req, res) => {
     })
     .exec();
 
-  const store = await Store.findOne({ userId: req.user.id }, { __v: 0 });
   if (!orders) {
     return res.status(400).json({ error: "You have no orders...yet!" });
-  } else if (!store.userId.includes(req.user.id)) {
-    return res.status(401).json({ error: "Acesso negado." });
   } else {
     res.json({ order: products });
   }
@@ -139,7 +144,7 @@ router.post("/createorder", async (req, res) => {
       res.status(400).json({ error });
     }
   } else {
-    res.status(401).json("Você não está autorizado.");
+    res.status(401).json("Acesso negado.");
   }
 });
 
