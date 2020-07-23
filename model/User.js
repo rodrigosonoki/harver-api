@@ -4,7 +4,6 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-
       min: 6,
       max: 255,
     },
@@ -23,6 +22,18 @@ const userSchema = new mongoose.Schema(
     date: {
       type: Date,
       default: Date.now,
+    },
+    avatar: {
+      type: String,
+      default: "https://api.adorable.io/avatars/40/abott@adorable.png",
+    },
+    role: {
+      type: String,
+      default: "user",
+    },
+    isVerified: {
+      type: Boolean,
+      default: 0,
     },
   },
   { collection: "users" }

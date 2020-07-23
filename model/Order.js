@@ -1,22 +1,22 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema(
+const orderSchema = new mongoose.Schema(
   {
-    sellerId: {
-      type: String,
-      required: true,
+    storeId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Store",
     },
     pedidoId: {
-      type: String,
+      type: Number,
       required: true,
     },
-    products: [
+    skus: [
       {
-        productId: {
-          type: String,
+        skuCode: {
+          type: "String",
           required: true,
         },
-        price: {
+        quantity: {
           type: Number,
           required: true,
         },
@@ -38,4 +38,4 @@ const userSchema = new mongoose.Schema(
   { collection: "orders" }
 );
 
-module.exports = mongoose.model("Order", userSchema);
+module.exports = mongoose.model("Order", orderSchema);

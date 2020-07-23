@@ -5,19 +5,20 @@ const app = express();
 
 require("dotenv/config");
 
-//MIDDLEWARES
-const pedidoId = require("./middlewares/orderId");
+//MIDDLEWARE
+const verifyToken = require("./middlewares/validate-token");
 
 app.use(cors());
 app.options("*", cors());
 
 // import routes
 const authRoutes = require("./routes/auth");
-const verifyToken = require("./routes/validate-token");
+const accountRoutes = require("./routes/account");
+const storeRoutes = require("./routes/store");
+const orderRoutes = require("./routes/order");
+const productRoutes = require("./routes/product");
 
-const createOrder = require("./routes/createOrder");
-const getOrder = require("./routes/getOrders");
-const getOrderDetail = require("./routes/getOrderDetail");
+const getUser = require("./routes/getUser");
 
 // connect to db
 mongoose.connect(
@@ -35,10 +36,14 @@ app.use(express.json());
 // route middlewares
 app.use("/api/user", authRoutes);
 
-app.use("/api/createorder", pedidoId, createOrder);
+app.use("/api/account", verifyToken, accountRoutes);
 
-app.use("/api/getorder", verifyToken, getOrder);
+app.use("/api/store", verifyToken, storeRoutes);
 
-app.use("/api/getorderdetail", verifyToken, getOrderDetail);
+app.use("/api/order", verifyToken, orderRoutes);
+
+app.use("/api/getuser", verifyToken, getUser);
+
+app.use("/api/product", verifyToken, productRoutes);
 
 app.listen(3333, () => console.log("Listening on PORT 3000"));
