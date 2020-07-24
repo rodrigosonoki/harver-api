@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 
 const accountSchema = new mongoose.Schema(
   {
-    userId: {
+    storeId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Store",
+      required: true,
     },
     bank: {
       name: {

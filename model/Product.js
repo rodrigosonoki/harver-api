@@ -30,6 +30,9 @@ const productSchema = new mongoose.Schema(
       default: new Date(),
     },
     skus: [{ type: mongoose.Types.ObjectId, ref: "Sku" }],
+    productId: {
+      type: Number,
+    },
   },
   { collection: "products" }
 );

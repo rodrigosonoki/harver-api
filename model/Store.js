@@ -6,6 +6,10 @@ const storeSchema = new mongoose.Schema(
       type: "String",
       default: "Minha loja",
     },
+    storeNumber: {
+      type: Number,
+      required: true,
+    },
     userId: [
       {
         type: mongoose.Schema.Types.ObjectId,

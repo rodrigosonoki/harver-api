@@ -6,7 +6,7 @@ const orderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Store",
     },
-    pedidoId: {
+    orderId: {
       type: Number,
       required: true,
     },

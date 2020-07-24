@@ -29,8 +29,10 @@ router.post("/register", async (req, res) => {
   });
 
   //CREATE STORE
+  const id = (await Store.find().countDocuments()) + 1;
   const store = new Store({
     userId: user.id,
+    storeNumber: id,
   });
 
   try {

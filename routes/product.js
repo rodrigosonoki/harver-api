@@ -8,11 +8,13 @@ router.post("/createproduct", async (req, res) => {
   //CHECK IF ADMIN
   const activeUser = await User.findById(req.user.id);
   if (activeUser.role === "admin") {
-    const store = await Store.findOne({ userId: req.user.id }, { __v: 0 });
+    const store = await Store.findById(req.body.storeId, { __v: 0 });
+    const id = (await Product.find().countDocuments()) + 1;
     const product = new Product({
       name: req.body.name,
       price: req.body.price,
       storeId: store.id,
+      productId: id,
     });
 
     //ADD PRODUCT ID TO SKU

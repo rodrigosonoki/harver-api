@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const Order = require("../model/Order");
 const Store = require("../model/Store");
-const Product = require("../model/Product");
 const User = require("../model/User");
 const Sku = require("../model/Sku");
 
@@ -34,10 +33,30 @@ router.get("/getorder", async (req, res) => {
   }
 });
 
+//ADMIN
+//GET ALL ORDERS FROM ALL USERS
+router.get("/getorder/admin", async (req, res) => {
+  const activeUser = await User.findById(req.user.id);
+  if (activeUser.role != "admin") {
+    return res.status(401).json("Acesso negado.");
+  }
+
+  const orders = await Order.find();
+
+  try {
+    res.json({
+      orders,
+    });
+  } catch (err) {
+    res.status(400).json({ err });
+  }
+});
+
 //GET ORDER BY ID FROM USER
 router.get("/:id", async (req, res) => {
   id = req.params.id;
-  const orders = await Order.findOne({ pedidoId: id }).exec();
+  const orders = await Order.findOne({ orderId: id }).exec();
+  console.log(orders);
   const store = await Store.findById(orders.storeId).exec();
   if (!store.userId.includes(req.user.id)) {
     return res.status(401).json("Acesso negado");
@@ -126,12 +145,13 @@ router.post("/createorder", async (req, res) => {
     const sum = c[0];
 
     const store = await Store.findById(req.body.storeId);
+    console.log(store);
 
     const id = (await Order.find().countDocuments()) + 1;
 
     const order = new Order({
       totalPrice: sum,
-      pedidoId: id,
+      orderId: id,
       storeId: store.id,
       skus: req.body.sku,
     });
