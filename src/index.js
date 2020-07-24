@@ -46,4 +46,6 @@ app.use("/api/user", verifyToken, userRoutes);
 
 app.use("/api/product", verifyToken, productRoutes);
 
-app.listen(3333, () => console.log("Listening on PORT 3000"));
+app.listen(process.env.PORT || 3333, () =>
+  console.log("Listening on PORT 3000")
+);
