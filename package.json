@@ -13,7 +13,8 @@
     "mongoose": "^5.9.23"
   },
   "scripts": {
-    "start": "nodemon index"
+    "dev": "nodemon src/index",
+    "start": "node src/index"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
