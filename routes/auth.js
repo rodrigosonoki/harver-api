@@ -71,6 +71,8 @@ router.post("/login", async (req, res) => {
     process.env.SECRET_TOKEN
   );
 
+  console.log(`User ${req.body.email} just logged in...`);
+
   res.header("auth-token", token).json({
     error: null,
     data: {
