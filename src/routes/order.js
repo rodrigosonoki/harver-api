@@ -109,14 +109,23 @@ router.post("/createorder", async (req, res) => {
     )
       .populate({
         path: "product",
-        select: "-_id -image -dateCreated -skus -name -storeId -__v",
+        select: "-_id -image -dateCreated -skus -name -__v",
       })
       .exec();
+
+    const store = await Store.findOne({ storeNumber: req.body.storeNumber });
+
+    /* HANDLING ERROR:
+SKU BELONG TO DIFFERENT STORES */
+    products.map((i) => {
+      if (i.product.storeId != store._id)
+        return res.json({ errorMsg: "Os skus pertencem à lojas diferentes" });
+    });
 
     /* HANDLING ERROR:
     SKUCODE IS INVALID */
     if (products.length != skuArray.length) {
-      return res.json({ errorMsg: "Tem algum skuCode errado..." });
+      return res.json({ errorMsg: "Tem algum skuCode inválido" });
     }
 
     //CREATE NEW ARRAY WITH PRICE AND QUANTITY -- I AM MUITO FODA, KRL.
@@ -150,12 +159,17 @@ router.post("/createorder", async (req, res) => {
     //SETTING THE VALUES CORRECTLY
     const sum = c[0];
 
-    const store = await Store.findOne({ storeNumber: req.body.storeNumber });
+    const storeVerify = await Store.findById(products[0].product.storeId);
+
+    /* HANDLING ERROR:
+    PRODUCT BELONGS TO STORE */
+    if (store.storeNumber != storeVerify.storeNumber)
+      return res.json({ errorMsg: "Os produtos não pertecem à loja" });
 
     /* HANDLING ERROR:
     STORENUMBER IS INVALID */
     if (!store) {
-      return res.json({ errorMsg: "ID da loja inválido." });
+      return res.json({ errorMsg: "ID da loja inválido" });
     }
 
     const id = (await Order.find().countDocuments()) + 1;
