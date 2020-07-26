@@ -56,7 +56,7 @@ router.get("/getorder/admin", async (req, res) => {
 router.get("/:id", async (req, res) => {
   id = req.params.id;
   const orders = await Order.findOne({ orderId: id }).exec();
-  console.log(orders);
+
   const store = await Store.findById(orders.storeId).exec();
   if (!store.userId.includes(req.user.id)) {
     return res.status(401).json("Acesso negado");
@@ -75,14 +75,14 @@ router.get("/:id", async (req, res) => {
   )
     .populate({
       path: "product",
-      select: "-_id -dateCreated -skus -storeId -__v",
+      select: "-_id -dateCreated  -storeId -__v",
     })
     .exec();
 
   if (!orders) {
     return res.status(400).json({ error: "You have no orders...yet!" });
   } else {
-    res.json({ order: products });
+    res.json({ order: products, orders });
   }
 });
 
@@ -144,8 +144,7 @@ router.post("/createorder", async (req, res) => {
     //SETTING THE VALUES CORRECTLY
     const sum = c[0];
 
-    const store = await Store.findById(req.body.storeId);
-    console.log(store);
+    const store = await Store.findOne({ storeNumber: req.body.storeNumber });
 
     const id = (await Order.find().countDocuments()) + 1;
 
