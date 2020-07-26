@@ -127,6 +127,12 @@ router.post("/createorder", async (req, res) => {
     const store = await Store.findOne({ storeNumber: req.body.storeNumber });
 
     /* HANDLING ERROR:
+    STORENUMBER IS INVALID */
+    if (!store) {
+      return res.json({ msg: "ID da loja inválido" });
+    }
+
+    /* HANDLING ERROR:
 SKU BELONG TO DIFFERENT STORES */
 
     const skuCheck = products.map((i) => {
@@ -182,12 +188,6 @@ SKU BELONG TO DIFFERENT STORES */
     PRODUCT BELONGS TO STORE */
     if (store.storeNumber != storeVerify.storeNumber)
       return res.json({ msg: "Os produtos não pertecem à loja" });
-
-    /* HANDLING ERROR:
-    STORENUMBER IS INVALID */
-    if (!store) {
-      return res.json({ msg: "ID da loja inválido" });
-    }
 
     const id = (await Order.find().countDocuments()) + 1;
 

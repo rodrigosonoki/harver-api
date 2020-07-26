@@ -5,7 +5,7 @@ const Store = require("../model/Store");
 router.get("/getinfo", async (req, res) => {
   const store = await Store.findOne({ userId: req.user.id });
   const account = await Account.findOne({ storeId: store.id }).exec();
-  console.log(account);
+
   if (req.user.id != store.userId) {
     return res.status(401).json("Acesso negado.");
   }
