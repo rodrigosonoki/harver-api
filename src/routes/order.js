@@ -113,6 +113,12 @@ router.post("/createorder", async (req, res) => {
       })
       .exec();
 
+    /* HANDLING ERROR:
+    SKUCODE IS INVALID */
+    if (products.length != skuArray.length) {
+      return res.json({ errorMsg: "Tem algum skuCode errado..." });
+    }
+
     //CREATE NEW ARRAY WITH PRICE AND QUANTITY -- I AM MUITO FODA, KRL.
     const newArr = req.body.sku.map((i) => ({
       ...i,
@@ -145,6 +151,12 @@ router.post("/createorder", async (req, res) => {
     const sum = c[0];
 
     const store = await Store.findOne({ storeNumber: req.body.storeNumber });
+
+    /* HANDLING ERROR:
+    STORENUMBER IS INVALID */
+    if (!store) {
+      return res.json({ errorMsg: "ID da loja inválido." });
+    }
 
     const id = (await Order.find().countDocuments()) + 1;
 
