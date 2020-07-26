@@ -100,7 +100,7 @@ router.post("/createorder", async (req, res) => {
     });
 
     if (quantityCheck.includes(true))
-      return res.json({ msgError: "Quantidade inválida" });
+      return res.json({ msg: "Quantidade inválida" });
 
     //CHECK PRODUCTS FROM SKUCODE
     const request = req.body.sku;
@@ -136,13 +136,13 @@ SKU BELONG TO DIFFERENT STORES */
     });
 
     if (skuCheck.includes(false)) {
-      return res.json({ errorMsg: "Os skus pertencem a lojas diferentes" });
+      return res.json({ msg: "Os skus pertencem a lojas diferentes" });
     }
 
     /* HANDLING ERROR:
     SKUCODE IS INVALID */
     if (products.length != skuArray.length) {
-      return res.json({ errorMsg: "Tem algum sku inválido" });
+      return res.json({ msg: "Tem algum sku inválido" });
     }
 
     //CREATE NEW ARRAY WITH PRICE AND QUANTITY -- I AM MUITO FODA, KRL.
@@ -181,12 +181,12 @@ SKU BELONG TO DIFFERENT STORES */
     /* HANDLING ERROR:
     PRODUCT BELONGS TO STORE */
     if (store.storeNumber != storeVerify.storeNumber)
-      return res.json({ errorMsg: "Os produtos não pertecem à loja" });
+      return res.json({ msg: "Os produtos não pertecem à loja" });
 
     /* HANDLING ERROR:
     STORENUMBER IS INVALID */
     if (!store) {
-      return res.json({ errorMsg: "ID da loja inválido" });
+      return res.json({ msg: "ID da loja inválido" });
     }
 
     const id = (await Order.find().countDocuments()) + 1;
@@ -201,7 +201,7 @@ SKU BELONG TO DIFFERENT STORES */
     try {
       const savedOrder = await order.save();
       order.save();
-      res.json({ error: null, data: savedOrder });
+      res.json({ msg: `Pedido #${id} criado`, data: savedOrder });
     } catch (error) {
       res.status(400).json({ error });
     }
