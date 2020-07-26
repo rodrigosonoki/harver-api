@@ -91,6 +91,17 @@ router.post("/createorder", async (req, res) => {
   //CHECK IF ADMIN
   const activeUser = await User.findById(req.user.id);
   if (activeUser.role === "admin") {
+    /* HANDLING ERRORS:
+    NEGATIVE QUANTITY */
+    const quantityCheck = req.body.sku.map((i) => {
+      if (i.quantity < 1) {
+        return true;
+      } else return false;
+    });
+
+    if (quantityCheck.includes(true))
+      return res.json({ msgError: "Quantidade inválida" });
+
     //CHECK PRODUCTS FROM SKUCODE
     const request = req.body.sku;
     const skuArray = request.map((i) => {
