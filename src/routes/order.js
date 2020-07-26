@@ -117,15 +117,21 @@ router.post("/createorder", async (req, res) => {
 
     /* HANDLING ERROR:
 SKU BELONG TO DIFFERENT STORES */
-    products.map((i) => {
-      if (i.product.storeId != store._id)
-        return res.json({ errorMsg: "Os skus pertencem à lojas diferentes" });
+
+    const skuCheck = products.map((i) => {
+      if (JSON.stringify(i.product.storeId) === JSON.stringify(store._id)) {
+        return true;
+      } else return false;
     });
+
+    if (skuCheck.includes(false)) {
+      return res.json({ errorMsg: "Os skus pertencem a lojas diferentes" });
+    }
 
     /* HANDLING ERROR:
     SKUCODE IS INVALID */
     if (products.length != skuArray.length) {
-      return res.json({ errorMsg: "Tem algum skuCode inválido" });
+      return res.json({ errorMsg: "Tem algum sku inválido" });
     }
 
     //CREATE NEW ARRAY WITH PRICE AND QUANTITY -- I AM MUITO FODA, KRL.
