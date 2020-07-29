@@ -102,4 +102,17 @@ router.post("/createproduct", async (req, res) => {
   }
 });
 
+router.get("/:id/images", async (req, res) => {
+  id = req.params.id;
+  const productImage = await Product.findOne(
+    { productId: id },
+    { dateCreated: 0, skus: 0, _id: 0, name: 0, price: 0, storeId: 0, __v: 0 }
+  );
+  try {
+    res.json({ product: productImage });
+  } catch (err) {
+    res.json({ err });
+  }
+});
+
 module.exports = router;
