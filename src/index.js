@@ -17,6 +17,7 @@ const accountRoutes = require("./routes/account");
 const storeRoutes = require("./routes/store");
 const orderRoutes = require("./routes/order");
 const productRoutes = require("./routes/product");
+const leadRoutes = require("./routes/lead");
 
 const userRoutes = require("./routes/user");
 
@@ -45,6 +46,8 @@ app.use("/api/order", verifyToken, orderRoutes);
 app.use("/api/user", verifyToken, userRoutes);
 
 app.use("/api/product", verifyToken, productRoutes);
+
+app.use("/api/lead", leadRoutes);
 
 app.listen(process.env.PORT || 3333, () =>
   console.log("Listening on PORT 3000")
