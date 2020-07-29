@@ -82,7 +82,7 @@ router.get("/:id", async (req, res) => {
   if (!orders) {
     return res.status(400).json({ error: "You have no orders...yet!" });
   } else {
-    res.json({ order: products, orders });
+    res.json({ orders });
   }
 });
 
@@ -113,14 +113,13 @@ router.post("/createorder", async (req, res) => {
       {
         _id: 0,
         color: 0,
-        size: 0,
         quantityAvailable: 0,
         __v: 0,
       }
     )
       .populate({
         path: "product",
-        select: "-_id -image -dateCreated -skus -name -__v",
+        select: "-_id -image -dateCreated -skus  -__v",
       })
       .exec();
 
@@ -182,20 +181,27 @@ SKU BELONG TO DIFFERENT STORES */
     //SETTING THE VALUES CORRECTLY
     const sum = c[0];
 
-    const storeVerify = await Store.findById(products[0].product.storeId);
-
     /* HANDLING ERROR:
     PRODUCT BELONGS TO STORE */
+    const storeVerify = await Store.findById(products[0].product.storeId);
     if (store.storeNumber != storeVerify.storeNumber)
       return res.json({ msg: "Os produtos não pertecem à loja" });
 
     const id = (await Order.find().countDocuments()) + 1;
 
+    /* ADD PRICE AND SIZE DATA TO OBJECT */
+    const skusArr = req.body.sku.map((i) => ({
+      ...i,
+      price: products.find((item) => item.skuCode === i.skuCode).product.price,
+      size: products.find((item) => item.skuCode === i.skuCode).size,
+      name: products.find((item) => item.skuCode === i.skuCode).product.name,
+    }));
+
     const order = new Order({
       totalPrice: sum,
       orderId: id,
       storeId: store.id,
-      skus: req.body.sku,
+      skus: skusArr,
     });
 
     try {
@@ -207,6 +213,23 @@ SKU BELONG TO DIFFERENT STORES */
     }
   } else {
     res.status(401).json("Acesso negado.");
+  }
+});
+
+/* ADMIN ROUTE */
+//DELETE ORDER
+router.delete("/:id", async (req, res) => {
+  const activeUser = await User.findById(req.user.id);
+  if (activeUser.role != "admin") {
+    return res.status(401).json("Acesso negado.");
+  }
+  id = req.params.id;
+  await Order.deleteOne({ orderId: id }).exec();
+
+  try {
+    res.json({ msg: "Pedido deletado" });
+  } catch (err) {
+    res.json({ msg: err });
   }
 });
 
