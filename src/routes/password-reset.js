@@ -8,7 +8,7 @@ router.post("/forgot-password", async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
 
-  if (!user) return res.status(400).json({ error: "User not found" });
+  if (!user) return res.status(200).send();
 
   const token = crypto.randomBytes(20).toString("hex");
 
