@@ -3,6 +3,8 @@ const Order = require("../model/Order");
 const Store = require("../model/Store");
 const User = require("../model/User");
 const Sku = require("../model/Sku");
+const mailer = require("../modules/mailer");
+const { getMaxListeners } = require("../model/User");
 
 //GET ALL ORDERS FROM USER
 router.get("/getorder", async (req, res) => {
@@ -204,10 +206,45 @@ SKU BELONG TO DIFFERENT STORES */
       skus: skusArr,
     });
 
+    /* SEND EMAIL */
+    const users = await Store.findOne(
+      { storeNumber: req.body.storeNumber },
+      {
+        name: 0,
+        products: 0,
+        _id: 0,
+        storeNumber: 0,
+        __v: 0,
+      }
+    )
+      .populate({
+        path: "userId",
+        select: "-avatar -role -isVerified -_id -date -__v",
+      })
+      .exec();
+
+    const mailList = users.userId.map((i) => {
+      return i.email;
+    });
+
     try {
       const savedOrder = await order.save();
       order.save();
-      res.json({ msg: `Pedido #${id} criado`, data: savedOrder });
+      mailer.sendMail(
+        {
+          to: mailList,
+          from: "rodrigo@harver.com.br",
+          template: "created-order",
+          context: { id },
+        },
+        (err) => {
+          if (err) {
+            console.log(err);
+            return res.status(400).json({ error: "Deu erro." });
+          }
+          res.json({ msg: `Pedido #${id} criado`, data: savedOrder });
+        }
+      );
     } catch (error) {
       res.status(400).json({ error });
     }

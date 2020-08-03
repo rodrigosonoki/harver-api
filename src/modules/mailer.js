@@ -16,11 +16,11 @@ transport.use(
   hbs({
     viewEngine: {
       extName: ".html",
-      partialsDir: path.resolve("./src/assets/mail/"),
-      layoutsDir: path.resolve("./src/assets/mail/"),
-      defaultLayout: "password-reset.html",
+      partialsDir: path.resolve("src/assets/mail/"),
+      layoutsDir: path.resolve("src/assets/mail/"),
+      defaultLayout: false,
     },
-    viewPath: path.resolve("./src/assets/mail/"),
+    viewPath: path.resolve("src/assets/mail/"),
     extName: ".html",
   })
 );
