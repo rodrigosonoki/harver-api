@@ -13,7 +13,6 @@ app.options("*", cors());
 
 // import routes
 const authRoutes = require("./routes/auth");
-const accountRoutes = require("./routes/account");
 const storeRoutes = require("./routes/store");
 const orderRoutes = require("./routes/order");
 const productRoutes = require("./routes/product");
@@ -37,8 +36,6 @@ app.use(express.json());
 
 // route middlewares
 app.use("/api/user", authRoutes);
-
-app.use("/api/account", verifyToken, accountRoutes);
 
 app.use("/api/store", verifyToken, storeRoutes);
 

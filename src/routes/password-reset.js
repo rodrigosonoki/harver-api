@@ -35,15 +35,16 @@ router.post("/forgot-password", async (req, res) => {
     mailer.sendMail(
       {
         to: email,
-        from: "rodrigo@harver.com.br",
+        from: "meajuda@harver.com.br",
         template: "password-reset",
         context: { url },
       },
       (err) => {
         if (err) {
+          console.log(err);
           return res.status(400).json({ error: "Deu erro." });
         }
-
+        console.log(email);
         return res.status(200).send();
       }
     );
@@ -56,18 +57,18 @@ router.post("/reset", async (req, res) => {
   const { password } = req.body;
   const { token, email } = req.query;
   const user = await User.findOne({ email }).select(
-    "+passwordResetToken passwordResetExpires"
+    "+passwordResetToken +passwordResetExpires"
   );
 
   if (!user) return res.status(400).send({ error: "User not found" });
 
   if (token !== user.passwordResetToken)
-    return res.status(400).send({ error: "InvalidToken" });
+    return res.status(400).send({ error: "Token inválido" });
 
   const now = new Date();
 
   if (now > user.passwordResetExpires)
-    return res.status(400).json({ error: "Token is expired" });
+    return res.status(400).json({ error: "Token expirado" });
 
   try {
     const salt = await bcrypt.genSalt(10);

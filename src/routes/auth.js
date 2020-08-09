@@ -38,6 +38,7 @@ router.post("/register", async (req, res) => {
   try {
     await user.save();
     await store.save();
+
     res.json("Conta criada com sucesso!");
   } catch (error) {
     res.status(400).json({ error });

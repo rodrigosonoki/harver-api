@@ -18,6 +18,20 @@ const storeSchema = new mongoose.Schema(
       },
     ],
     products: [{ type: mongoose.Types.ObjectId, ref: "Product" }],
+    bank: {
+      name: {
+        type: "String",
+        default: "",
+      },
+      agency: {
+        type: "String",
+        default: "",
+      },
+      account: {
+        type: "String",
+        default: "",
+      },
+    },
   },
   { collection: "stores" }
 );

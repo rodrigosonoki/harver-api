@@ -3,11 +3,11 @@ const hbs = require("nodemailer-express-handlebars");
 const path = require("path");
 
 const transport = nodemailer.createTransport({
-  host: "smtp.mailtrap.io",
-  port: 2525,
+  host: "smtp.umbler.com",
+  port: 587,
   auth: {
-    user: "24ac11a9af3d57",
-    pass: "4e15c46f6ef375",
+    user: "meajuda@harver.com.br",
+    pass: "xs*knyQYNF8u7@W",
   },
 });
 

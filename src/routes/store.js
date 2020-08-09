@@ -92,4 +92,22 @@ router.get("/get/:id/skus", async (req, res) => {
   }
 });
 
+//UPDATE BANK ACCOUNT
+router.put("/account/update", async (req, res) => {
+  const store = await Store.findOneAndUpdate(
+    { userId: req.user.id },
+    req.body,
+    {
+      new: true,
+    }
+  );
+
+  try {
+    await store.save();
+    res.json("Conta atualizada.");
+  } catch (err) {
+    res.status(400).json({ err });
+  }
+});
+
 module.exports = router;
