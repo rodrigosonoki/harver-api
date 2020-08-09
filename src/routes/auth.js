@@ -4,6 +4,8 @@ const Store = require("../model/Store");
 const { registerValidation, loginValidation } = require("../utils/validation");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const mailer = require("../modules/mailer");
 
 require("dotenv/config");
 
@@ -23,8 +25,14 @@ router.post("/register", async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const password = await bcrypt.hash(req.body.password, salt);
 
+  //CREATE HASH FOR VERIFICATION (isVerified)
+  const token = crypto.randomBytes(20).toString("hex");
+
+  const url = `https://app.harver.com.br/verificar-email?token=${token}`;
+
   const user = new User({
     email: req.body.email,
+    verificationToken: token,
     password,
   });
 
@@ -38,6 +46,21 @@ router.post("/register", async (req, res) => {
   try {
     await user.save();
     await store.save();
+
+    mailer.sendMail(
+      {
+        to: req.body.email,
+        from: "meajuda@harver.com.br",
+        template: "token-verification",
+        context: { url },
+      },
+      (err) => {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({ error: "Deu erro." });
+        }
+      }
+    );
 
     res.json("Conta criada com sucesso!");
   } catch (error) {

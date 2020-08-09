@@ -44,7 +44,7 @@ router.post("/forgot-password", async (req, res) => {
           console.log(err);
           return res.status(400).json({ error: "Deu erro." });
         }
-        console.log(email);
+
         return res.status(200).send();
       }
     );

@@ -18,6 +18,7 @@ const orderRoutes = require("./routes/order");
 const productRoutes = require("./routes/product");
 const leadRoutes = require("./routes/lead");
 const passwordResetRoutes = require("./routes/password-reset");
+const emailVerificationRoutes = require("./routes/email-verification");
 
 const userRoutes = require("./routes/user");
 
@@ -27,6 +28,7 @@ mongoose.connect(
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
   },
   () => console.log("Conectado ao MongoDB")
 );
@@ -48,6 +50,8 @@ app.use("/api/product", verifyToken, productRoutes);
 app.use("/api/lead", leadRoutes);
 
 app.use("/api/password-reset", passwordResetRoutes);
+
+app.use("/api/email-validation", emailVerificationRoutes);
 
 app.listen(process.env.PORT || 3333, () =>
   console.log("Listening on PORT 3000")

@@ -43,6 +43,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: 0,
     },
+    verificationToken: {
+      type: String,
+      select: false,
+    },
   },
   { collection: "users" }
 );
